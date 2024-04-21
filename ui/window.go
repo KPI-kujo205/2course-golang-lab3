@@ -16,6 +16,9 @@ import (
 	"golang.org/x/mobile/event/size"
 )
 
+const WINDOW_HEIGHT = 800
+const WINDOW_WIDTH = 800
+
 type Visualizer struct {
 	Title         string
 	Debug         bool
@@ -25,8 +28,9 @@ type Visualizer struct {
 	tx   chan screen.Texture
 	done chan struct{}
 
-	sz  size.Event
-	pos image.Rectangle
+	sz          size.Event
+	pos         image.Rectangle
+	centerCords image.Point
 }
 
 func (pw *Visualizer) Main() {
@@ -34,6 +38,7 @@ func (pw *Visualizer) Main() {
 	pw.done = make(chan struct{})
 	pw.pos.Max.X = 200
 	pw.pos.Max.Y = 200
+	pw.centerCords = image.Point{X: WINDOW_WIDTH / 2, Y: WINDOW_HEIGHT / 2}
 	driver.Main(pw.run)
 }
 
@@ -44,8 +49,8 @@ func (pw *Visualizer) Update(t screen.Texture) {
 func (pw *Visualizer) run(s screen.Screen) {
 	w, err := s.NewWindow(&screen.NewWindowOptions{
 		Title:  pw.Title,
-		Width:  800,
-		Height: 800,
+		Width:  WINDOW_WIDTH,
+		Height: WINDOW_HEIGHT,
 	})
 	if err != nil {
 		log.Fatal("Failed to initialize the app window:", err)
@@ -134,11 +139,13 @@ func (pw *Visualizer) handleEvent(e any, t screen.Texture) {
 
 func (pw *Visualizer) drawDefaultUI() {
 	pw.w.Fill(pw.sz.Bounds(), color.White, draw.Src)
+	curX := pw.centerCords.X
+	curY := pw.centerCords.Y
+	figureColor := color.RGBA{255, 255, 0, 1}
 
-	// TODO: Змінити колір фону та додати відображення фігури у вашому варіанті.
+	pw.w.Fill(image.Rect(curX-200, curY-200, curX+200, curY-100), figureColor, draw.Src)
+	pw.w.Fill(image.Rect(curX-50, curY-100, curX+50, curY+100), figureColor, draw.Src)
 
-	// Малювання білої рамки.
-	// screen.Uploader.Fill()
 	for _, br := range imageutil.Border(pw.sz.Bounds(), 10) {
 		pw.w.Fill(br, color.White, draw.Src)
 	}
