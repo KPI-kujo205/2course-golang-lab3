@@ -122,7 +122,10 @@ func (pw *Visualizer) handleEvent(e any, t screen.Texture) {
 
 	case mouse.Event:
 		if t == nil {
-			// TODO: Реалізувати реакцію на натискання кнопки миші.
+			if e.Button == mouse.ButtonRight && e.Direction == mouse.DirPress {
+				pw.centerCords = image.Point{int(e.X), int(e.Y)}
+				pw.w.Send(paint.Event{})
+			}
 		}
 
 	case paint.Event:
@@ -143,8 +146,8 @@ func (pw *Visualizer) drawDefaultUI() {
 	curY := pw.centerCords.Y
 	figureColor := color.RGBA{255, 255, 0, 1}
 
-	pw.w.Fill(image.Rect(curX-200, curY-200, curX+200, curY-100), figureColor, draw.Src)
-	pw.w.Fill(image.Rect(curX-50, curY-100, curX+50, curY+100), figureColor, draw.Src)
+	pw.w.Fill(image.Rect(curX-200, curY-100, curX+200, curY), figureColor, draw.Src)
+	pw.w.Fill(image.Rect(curX-50, curY-100, curX+50, curY+200), figureColor, draw.Src)
 
 	for _, br := range imageutil.Border(pw.sz.Bounds(), 10) {
 		pw.w.Fill(br, color.White, draw.Src)
