@@ -16,8 +16,8 @@ import (
 	"golang.org/x/mobile/event/size"
 )
 
-const WINDOW_HEIGHT = 800
-const WINDOW_WIDTH = 800
+const WindowHeight = 800
+const WindowWidth = 800
 
 type Visualizer struct {
 	Title         string
@@ -38,7 +38,7 @@ func (pw *Visualizer) Main() {
 	pw.done = make(chan struct{})
 	pw.pos.Max.X = 200
 	pw.pos.Max.Y = 200
-	pw.centerCords = image.Point{X: WINDOW_WIDTH / 2, Y: WINDOW_HEIGHT / 2}
+	pw.centerCords = image.Point{X: WindowWidth / 2, Y: WindowHeight / 2}
 	driver.Main(pw.run)
 }
 
@@ -49,8 +49,8 @@ func (pw *Visualizer) Update(t screen.Texture) {
 func (pw *Visualizer) run(s screen.Screen) {
 	w, err := s.NewWindow(&screen.NewWindowOptions{
 		Title:  pw.Title,
-		Width:  WINDOW_WIDTH,
-		Height: WINDOW_HEIGHT,
+		Width:  WindowWidth,
+		Height: WindowHeight,
 	})
 	if err != nil {
 		log.Fatal("Failed to initialize the app window:", err)
@@ -123,7 +123,7 @@ func (pw *Visualizer) handleEvent(e any, t screen.Texture) {
 	case mouse.Event:
 		if t == nil {
 			if e.Button == mouse.ButtonRight && e.Direction == mouse.DirPress {
-				pw.centerCords = image.Point{int(e.X), int(e.Y)}
+				pw.centerCords = image.Point{X: int(e.X), Y: int(e.Y)}
 				pw.w.Send(paint.Event{})
 			}
 		}
@@ -144,7 +144,7 @@ func (pw *Visualizer) drawDefaultUI() {
 	pw.w.Fill(pw.sz.Bounds(), color.White, draw.Src)
 	curX := pw.centerCords.X
 	curY := pw.centerCords.Y
-	figureColor := color.RGBA{255, 255, 0, 1}
+	figureColor := color.RGBA{R: 255, G: 255, A: 1}
 
 	pw.w.Fill(image.Rect(curX-200, curY-100, curX+200, curY), figureColor, draw.Src)
 	pw.w.Fill(image.Rect(curX-50, curY-100, curX+50, curY+200), figureColor, draw.Src)
