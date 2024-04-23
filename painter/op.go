@@ -1,9 +1,11 @@
 package painter
 
+import "C"
 import (
-	"image/color"
-
 	"golang.org/x/exp/shiny/screen"
+	"golang.org/x/image/draw"
+	"image"
+	"image/color"
 )
 
 // Operation змінює вхідну текстуру.
@@ -45,4 +47,63 @@ func WhiteFill(t screen.Texture) {
 // GreenFill зафарбовує тестуру у зелений колір. Може бути викоистана як Operation через OperationFunc(GreenFill).
 func GreenFill(t screen.Texture) {
 	t.Fill(t.Bounds(), color.RGBA{G: 0xff, A: 0xff}, screen.Src)
+}
+
+type BgRectangle struct {
+	TopLeftPoint     image.Point
+	BottomRightPoint image.Point
+}
+
+type NewTFigure struct {
+	CentralPoint image.Point
+}
+
+type MoveNewTFigure struct {
+	OffsetX int
+	OffsetY int
+	Targets []*NewTFigure
+}
+
+func Reset(t screen.Texture) {
+	t.Fill(t.Bounds(), color.Black, screen.Src)
+}
+
+func (bgrect *BgRectangle) Do(t screen.Texture) bool {
+	t.Fill(
+		image.Rect(bgrect.TopLeftPoint.X, bgrect.TopLeftPoint.Y, bgrect.BottomRightPoint.X, bgrect.BottomRightPoint.Y),
+		color.Black, screen.Src,
+	)
+	return false
+}
+
+func (movtfigure *MoveNewTFigure) Do(t screen.Texture) bool {
+	for i := range movtfigure.Targets {
+		movtfigure.Targets[i].CentralPoint.X += movtfigure.OffsetX
+		movtfigure.Targets[i].CentralPoint.Y += movtfigure.OffsetY
+	}
+
+	return false
+}
+
+func (ntfigure *NewTFigure) Do(t screen.Texture) bool {
+	figureColor := color.RGBA{R: 255, G: 255, A: 1}
+	t.Fill(
+		image.Rect(
+			ntfigure.CentralPoint.X-200,
+			ntfigure.CentralPoint.Y-100,
+			ntfigure.CentralPoint.X+200,
+			ntfigure.CentralPoint.Y,
+		),
+		figureColor, draw.Src,
+	)
+	t.Fill(
+		image.Rect(
+			ntfigure.CentralPoint.X-50,
+			ntfigure.CentralPoint.Y-100,
+			ntfigure.CentralPoint.X+50,
+			ntfigure.CentralPoint.Y+200,
+		),
+		figureColor, draw.Src,
+	)
+	return false
 }

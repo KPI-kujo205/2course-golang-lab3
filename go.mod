@@ -1,4 +1,4 @@
-module github.com/roman-mazur/architecture-lab-3
+module github.com/KPI-kujo205/2course-golang-lab3
 
 go 1.22
 
