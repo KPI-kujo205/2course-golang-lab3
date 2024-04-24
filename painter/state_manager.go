@@ -64,3 +64,33 @@ func (sp *StatePainter) ResetUpdateOp() {
 		sp.ResetBg()
 	}
 }
+
+// TODO: Implement method that adds each operation to the list and returns it
+func (sp *StatePainter) GetOperationsList() []Operation {
+	var opList []Operation
+
+	if sp.updateOp != nil {
+		opList = append(opList, sp.updateOp)
+	}
+
+	if sp.setBgColour != nil {
+		opList = append(opList, sp.setBgColour)
+	}
+
+	if sp.bgRectangle != nil {
+		opList = append(opList, sp.bgRectangle)
+	}
+
+	if len(sp.moveTFigures) != 0 {
+		opList = append(opList, sp.moveTFigures...)
+		sp.moveTFigures = nil
+	}
+
+	if len(sp.tFigures) != 0 {
+		for _, tFigure := range sp.tFigures {
+			opList = append(opList, tFigure)
+		}
+	}
+
+	return opList
+}
