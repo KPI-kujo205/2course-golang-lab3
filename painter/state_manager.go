@@ -65,7 +65,6 @@ func (sp *StatePainter) ResetUpdateOp() {
 	}
 }
 
-// TODO: Implement method that adds each operation to the list and returns it
 func (sp *StatePainter) GetOperationsList() []Operation {
 	var opList []Operation
 
