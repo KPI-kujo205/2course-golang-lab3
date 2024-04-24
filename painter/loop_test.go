@@ -1,6 +1,7 @@
 package painter
 
 import (
+	"github.com/stretchr/testify/mock"
 	"image"
 	"image/color"
 	"image/draw"
@@ -103,4 +104,13 @@ func (m *mockTexture) Bounds() image.Rectangle {
 func (m *mockTexture) Upload(dp image.Point, src screen.Buffer, sr image.Rectangle) {}
 func (m *mockTexture) Fill(dr image.Rectangle, src color.Color, op draw.Op) {
 	m.Colors = append(m.Colors, src)
+}
+
+type Mock struct {
+	mock.Mock
+}
+
+func (mockOperation *Mock) Do(t screen.Texture) bool {
+	args := mockOperation.Called(t)
+	return args.Bool(0)
 }
