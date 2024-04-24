@@ -1,6 +1,5 @@
 package painter
 
-import "C"
 import (
 	"golang.org/x/exp/shiny/screen"
 	"golang.org/x/image/draw"
@@ -70,8 +69,14 @@ func Reset(t screen.Texture) {
 
 func (bgrect *BgRectangle) Do(t screen.Texture) bool {
 	t.Fill(
-		image.Rect(bgrect.TopLeftPoint.X, bgrect.TopLeftPoint.Y, bgrect.BottomRightPoint.X, bgrect.BottomRightPoint.Y),
-		color.Black, screen.Src,
+		image.Rect(
+			bgrect.TopLeftPoint.X,
+			bgrect.TopLeftPoint.Y,
+			bgrect.BottomRightPoint.X,
+			bgrect.BottomRightPoint.Y,
+		),
+		color.Black,
+		screen.Src,
 	)
 	return false
 }
@@ -94,7 +99,8 @@ func (ntfigure *NewTFigure) Do(t screen.Texture) bool {
 			ntfigure.CentralPoint.X+200,
 			ntfigure.CentralPoint.Y,
 		),
-		figureColor, draw.Src,
+		figureColor,
+		draw.Src,
 	)
 	t.Fill(
 		image.Rect(
@@ -103,7 +109,8 @@ func (ntfigure *NewTFigure) Do(t screen.Texture) bool {
 			ntfigure.CentralPoint.X+50,
 			ntfigure.CentralPoint.Y+200,
 		),
-		figureColor, draw.Src,
+		figureColor,
+		draw.Src,
 	)
 	return false
 }
