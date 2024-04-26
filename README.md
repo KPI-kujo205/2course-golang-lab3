@@ -19,11 +19,6 @@ $ go run cmd/painter/main.go
 
 Firts and foremost, you have to add special rules for script execution using `chmod`. In order to run scripts you have to write these commands:
 
-* diagonal-move.sh:
-
-  ```bash
-  $ ./scripts/diagonal-move.sh
-  ```
 * green-frame.sh:
 
   ```bash
